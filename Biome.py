@@ -2,120 +2,11 @@ import Tkinter as tk
 import datetime
 import time
 from time import gmtime, strftime
-
-
-class Page(tk.Frame):
-    def __init__(self, *args, **kwargs):
-        tk.Frame.__init__(self, *args, **kwargs)
-        
-    def show(self):
-        self.lift()
-
-class QuickStats(Page):
-   def __init__(self, *args, **kwargs):
-       Page.__init__(self, *args, **kwargs)
-       label = tk.Label(self, text="This is page 1")
-       label.pack(side="top", fill="both", expand=True)
-
-class Kill(Page):
-   def __init__(self, *args, **kwargs):
-       Page.__init__(self, *args, **kwargs)
-       label = tk.Label(self, text="This isbpage 3")
-       #label.pack(side="top", fill="both", expand=True)
-
-       B1 = tk.Button(self,
-                       text="Component1",
-                       bg='#f18973',
-                       width=30,
-                       height=1,
-                       font=(None, 12),
-                       borderwidth=0)
-       B2 = tk.Button(self,
-                       text="Component 2",
-                       bg='#f18973',
-                       width=30,
-                       height=1,
-                       font=(None, 12),
-                       borderwidth=0)
-       B3 = tk.Button(self,
-                       text="Component 3",
-                       bg='#f18973',
-                       width=30,
-                       height=1,
-                       font=(None, 12),
-                       borderwidth=0)
-       B4 = tk.Button(self,
-                       text="Component 4",
-                       bg='#f18973',
-                       width=30,
-                       height=1,
-                       font=(None, 12),
-                       borderwidth=0)
-       B5 = tk.Button(self,
-                       text="Component 3",
-                       bg='#f18973',
-                       width=30,
-                       height=1,
-                       font=(None, 12),
-                       borderwidth=0)
-       B6  = tk.Button(self,
-                       text="Component 4",
-                       bg='#f18973',
-                       width=30,
-                       height=1,
-                       font=(None, 12),
-                       borderwidth=0)
-       B1.grid(row=0, column=0)
-       B2.grid(row=0, column=1)
-       B3.grid(row=0, column=2)
-       B4.grid(row=1, column=0)
-       B5.grid(row=1, column=1)
-       B6.grid(row=1, column=2)
-class Override(Page):
-   def __init__(self, *args, **kwargs):
-       Page.__init__(self, *args, **kwargs)
-       label = tk.Label(self, text="This is page 2")
-       label.pack(side="top", fill="both", expand=True)
-
-class Settings(Page):
-   def __init__(self, *args, **kwargs):
-       Page.__init__(self, *args, **kwargs)
-       label = tk.Label(self, text="Welcome to the settings page")
-       label.grid(row = 0, column = 0, sticky= "nsew")
-       container = tk.Frame(self)
-       container.grid(row=0,column = 0)
-
-       tempScale = tk.Scale(container, from_=0, to=60, tickinterval=10,
-                             orient="horizontal", borderwidth = 0, highlightthickness= 0, length=800)       
-       humidityScale = tk.Scale(container, from_=0, to=60, tickinterval=10,
-                             orient="horizontal", borderwidth = 0, highlightthickness= 0, length=800)       
-
-       cycleScale = tk.Scale(container, from_=0, to=60, tickinterval=10,
-                             orient="horizontal", borderwidth = 0, highlightthickness= 0, length=800)              
-       lightScale = tk.Scale(container, from_=0, to=60, tickinterval=10,
-                             orient="horizontal", borderwidth = 0, highlightthickness= 0, length=800)
-       
-       T1 = tk.Label(container, text="Temperature (C)", fg='White')
-       T2 = tk.Label(container, text="Humidity (%)", fg='White')  
-       T3 = tk.Label(container, text="Cycle", fg='White')
-       T4 = tk.Label(container, text="Light Sensitivity", fg='White')
-
-       tempScale.grid( row = 0, column = 1)
-       humidityScale.grid(row = 1, column = 1)
-       cycleScale.grid(row = 2, column = 1)
-       lightScale.grid(row = 3, column = 1)
-
-       tempScale.set(25)                                        #Sets the default temperature value to 25C
-       humidityScale.set(25)                                    #Sets humidity values to 25%
-       cycleScale.set(25)                                       #Sets humidity values to 25%
-       lightScale.set(25)                                       #Sets humidity values to 25%
-
-       T1.grid(row=0, column=2)
-       T2.grid(row=1, column=2)
-       T3.grid(row=2, column=2)
-       T4.grid(row=3, column=2)
-       
-       
+from Page import *
+from Settings import *
+from Kill import *
+from Override import *
+from QuickStats import *
 
 class MainView(tk.Frame):
     def __init__(self, *args, **kwargs):
@@ -179,8 +70,15 @@ class MainView(tk.Frame):
         p1.show()
 
         #------------------QUICK STATS----------------------------
+        #------------LeftStats------------------------
+        T = tk.Text(statsFrame, height= 4, width=50, borderwidth=0)
+        T.insert(tk.END, "T: \n"+ "H: \n"+ "Water:") 
+        T.pack(side="left")
+        #------------RightStats------------------------
+        T = tk.Text(statsFrame, height= 4, width=50, borderwidth=0)
+        T.pack(side="right")
 
-        #------------------Time----------------------------
+        #-----------------Time----------------------------
         sysTime = ''
         clock = tk.Label(statsFrame, font=( None,30,'bold'))
         clock.pack(side="top")
@@ -203,11 +101,8 @@ class MainView(tk.Frame):
             date.after(400, updateDate)
         updateDate()
         
-        #------------LeftStats------------------------
 
-        
-        #------------RightStats-----------------------
-        
+ 
 if __name__ == "__main__":
     root = tk.Tk()
     main = MainView(root)
