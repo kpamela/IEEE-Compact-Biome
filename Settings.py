@@ -3,73 +3,41 @@ import datetime
 import time
 from time import gmtime, strftime
 from Page import *
-from Humidity import *
-from LightSensitivity import *
-from Temperature import *
-from FeedCycle import *
-
+        
 class Settings(Page):
    def __init__(self, *args, **kwargs):
        Page.__init__(self, *args, **kwargs)
-
-       p1 = Temperature(self)
-       p2 = FeedCycle(self)
-       p3 = LightSensitivity(self)
-       p4 = Humidity(self)
-
-       buttonFrame = tk.Frame(self)
-       buttonFrame.pack(side="top")
+       label = tk.Label(self, text="Welcome to the settings page")
+       label.grid(row = 0, column = 0, sticky= "nsew")
        container = tk.Frame(self)
-       container.pack(side="top", expand =True, fill = "both")
+       container.grid(row=0,column = 0)
 
-       b1 = tk.Button(buttonFrame,
-                       text="Temperature",
-                       bg='#b2b2b2',
-                       width=20,
-                       height=10,
-                       font=(None, 12),
-                       borderwidth=1,
-                       pady = 5,
-                       command=p1.lift)
-       b2 = tk.Button(buttonFrame,
-                       text="FeedCycle",
-                       bg='#b2b2b2',
-                       width=20,
-                       height=10,
-                       font=(None, 12),
-                       borderwidth=1,
-                      padx = 5,
-                      pady = 5,
-                       command=p2.lift)
-       b3 = tk.Button(buttonFrame,
-                       text="Light Sensitivity",
-                       bg='#b2b2b2',
-                       width=20,
-                       height=10,
-                       font=(None, 12),
-                       borderwidth=1,
-                      padx = 5,
-                      pady = 5,
-                       command=p3.lift)
-       b4 = tk.Button(buttonFrame,
-                       text="Humidity",
-                       bg='#b2b2b2',
-                       width=20,
-                       height=10,
-                       font=(None, 12),
-                       borderwidth=1,
-                      padx = 5,
-                      pady = 5,
-                       command=p4.lift)
-       b1.pack(side="left")
-       b2.pack(side="left")
-       b3.pack(side="left")
-       b4.pack(side="left")
+       tempScale = tk.Scale(container, from_=0, to=60, tickinterval=10,
+                             orient="horizontal", borderwidth = 0, highlightthickness= 0, length=800)       
+       humidityScale = tk.Scale(container, from_=0, to=60, tickinterval=10,
+                             orient="horizontal", borderwidth = 0, highlightthickness= 0, length=800)       
 
-       p1.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
-       p2.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
-       p3.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
-       p4.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+       cycleScale = tk.Scale(container, from_=0, to=60, tickinterval=10,
+                             orient="horizontal", borderwidth = 0, highlightthickness= 0, length=800)              
+       lightScale = tk.Scale(container, from_=0, to=60, tickinterval=10,
+                             orient="horizontal", borderwidth = 0, highlightthickness= 0, length=800)
+       
+       T1 = tk.Label(container, text="Temperature (C)", fg='White')
+       T2 = tk.Label(container, text="Humidity (%)", fg='White')  
+       T3 = tk.Label(container, text="Cycle", fg='White')
+       T4 = tk.Label(container, text="Light Sensitivity", fg='White')
 
-       hm= Humidity()
-       print hm.get_humidity()
+       tempScale.grid( row = 0, column = 1)
+       humidityScale.grid(row = 1, column = 1)
+       cycleScale.grid(row = 2, column = 1)
+       lightScale.grid(row = 3, column = 1)
+
+       tempScale.set(25)                                        #Sets the default temperature value to 25C
+       humidityScale.set(25)                                    #Sets humidity values to 25%
+       cycleScale.set(25)                                       #Sets cycle values to 25%
+       lightScale.set(25)                                       #Sets light values to 25%
+
+       T1.grid(row=0, column=2)
+       T2.grid(row=1, column=2)
+       T3.grid(row=2, column=2)
+       T4.grid(row=3, column=2)
