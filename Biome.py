@@ -1,3 +1,4 @@
+
 import Tkinter as tk
 import datetime
 import time
@@ -7,6 +8,21 @@ from Settings import *
 from Kill import *
 from Override import *
 from QuickStats import *
+from config import *
+
+
+p_LED       = 18
+p_Fan1      = 22
+p_Fan2      = 29
+p_Peltier   = 31
+p_Nichrome  = 32
+p_WaterPump = 33
+p_Solenoid1 = 35
+p_Solenoid2 = 36
+p_Solenoid3 = 37
+p_Solenoid4 = 38
+p_Solenoid5 = 40
+
 
 class MainView(tk.Frame):
     def __init__(self, *args, **kwargs):
@@ -15,15 +31,14 @@ class MainView(tk.Frame):
         p2 = Kill(self)
         p3 = Override(self)
         p4 = Settings(self)
-
         buttonframe = tk.Frame(self)
         container = tk.Frame(self)
         statsFrame= tk.Frame(self)
         statsFrame.pack(side="top", fill="x", expand=False)
         buttonframe.pack(side="top", fill="x", expand=False)
         container.pack(side="top", fill="both", expand=True)
-    
 
+        
         p1.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         p2.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         p3.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
