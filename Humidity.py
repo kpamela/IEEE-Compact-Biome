@@ -1,6 +1,6 @@
 import Tkinter as tk
 from Page import *
-
+from Settings import *
 class Humidity(Page):
    def __init__(self, *args, **kwargs):
       Page.__init__(self, *args, **kwargs)
@@ -12,10 +12,8 @@ class Humidity(Page):
       self.humidityLabel = tk.Label(container, text="Humidity(%)" , fg='White')
       self.confirmButton = tk.Button(container, text="Confirm", bg='#b2b2b2',width=10,height=2,
                        font=(None, 12), command=self.set_humidity)
-
       self.humidityValue = 25
-      self.humidityScale.set(25)     
-
+      self.humidityScale.set(25)
       self.humidityScale.pack(side="top")
       self.confirmButton.pack(side="bottom")
       self.humidityLabel.pack(side="bottom")
