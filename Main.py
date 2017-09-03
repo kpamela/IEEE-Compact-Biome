@@ -9,18 +9,23 @@ from Override import *
 from QuickStats import *
 from config import *
 
+#Settings are for BCM(so GPIO1, GPIO 2, etc. NOT the pins
+p_led       =  24
 
-p_LED       = 18
-p_Fan1      = 22
-p_Fan2      = 29
-p_Peltier   = 31
-p_Nichrome  = 32
-p_WaterPump = 33
-p_Solenoid1 = 35
-p_Solenoid2 = 36
-p_Solenoid3 = 37
-p_Solenoid4 = 38
-p_Solenoid5 = 40
+
+p_solenoid1 =  19
+p_solenoid2 =  16
+p_solenoid3 =  26 
+p_solenoid4 =  20
+p_solenoid5 =  21
+
+p_nichrome  =  12
+p_peltier   =  6
+
+p_fan1      =  25
+p_fan2      =  5
+
+
 
 
 class MainView(tk.Frame):
@@ -31,8 +36,8 @@ class MainView(tk.Frame):
         p3 = Override(self)
         p4 = Settings(self)
         buttonframe = tk.Frame(self)
-        container = tk.Frame(self)
         statsFrame= tk.Frame(self)
+        container =tk.Frame(self)
         statsFrame.pack(side="top", fill="x", expand=False)
         buttonframe.pack(side="top", fill="x", expand=False)
         container.pack(side="top", fill="both", expand=True)
@@ -47,33 +52,33 @@ class MainView(tk.Frame):
         b1 = tk.Button(buttonframe,
                        text="QuickStats",
                        bg='#bc5a45',
-                       width=30,
+                       width=22,
                        height=1,
-                       font=(None, 12),
+                       font=(None, 15),
                        borderwidth=0,
                        command=p1.lift)
         b2 = tk.Button(buttonframe,
                        text="Kill",
                        bg='#f18973',
-                       width=30,
+                       width=22,
                        height=1,
-                       font=(None, 12),
+                       font=(None, 15),
                        borderwidth=0,
                        command=p2.lift)
         b3 = tk.Button(buttonframe,
                        text="Override",
                        bg='#f4e1d2',
-                       width=30,
+                       width=22,
                        height=1,
-                       font=(None, 12),
+                       font=(None, 15),
                        borderwidth=0,
                        command=p3.lift)
         b4 = tk.Button(buttonframe,
                        text="Settings",
                        bg='#b2b2b2',
-                       width=30,
+                       width=22,
                        height=1,
-                       font=(None, 12),
+                       font=(None, 15),
                        borderwidth=0,
                        command=p4.lift)
         b1.pack(side="left")
@@ -84,6 +89,7 @@ class MainView(tk.Frame):
         p1.show()
 
         #------------------QUICK STATS----------------------------
+        
         #------------LeftStats------------------------
         T = tk.Text(statsFrame, height= 4, width=50, borderwidth=0)
         T.insert(tk.END, "T: \n"+ "H: \n"+ "Water:") 
@@ -104,7 +110,6 @@ class MainView(tk.Frame):
         updateTime()
 
         #---------------Date------------------------
-
         sysDate = ''
         date = tk.Label(statsFrame, font=( None,10,'bold'))
         date.pack(side="top")
@@ -114,9 +119,47 @@ class MainView(tk.Frame):
             date.config(text=sysTime)
             date.after(400, updateDate)
         updateDate()
-        
 
- 
+        #---------------Collect all settings--------------
+        self.lightIntensity = p4.lightVal
+        def update_settings():
+            self.lightIntensity= p4.lightVal
+            self.tempSetting = p4.tempVal
+            print self.lightIntensity
+            print self.tempSetting
+            self.after(3000, update_settings)
+        update_settings()
+
+        #------------Collect all current measurements--------
+
+        #-----------Initialize with collected settings------
+        '''
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(p_led, GPIO.OUT)
+        GPIO.setup(p_solenoid1,GPIO.OUT)
+        GPIO.setup(p_solenoid2,GPIO.OUT)
+        GPIO.setup(p_solenoid3,GPIO.OUT)
+        GPIO.setup(p_solenoid4,GPIO.OUT)
+        GPIO.setup(p_solenoid5,GPIO.OUT)
+
+        light_pwm = GPIO.PWM(p_led, 100)
+        light_pwm.start(self.lightIntensity)
+
+        def refresh_pins():
+            #_______Temperature
+            if(currentTemp > tempSetting):
+                GPIO.output(p_nichrome, GPIO.HIGH)
+
+            elif(currentTemp < tempSetting):
+                GPIO.output(p_nichrome, GPIO.HIGH)
+            else:
+                GPIO.output(p_fan1, GPIO.HIGH)
+
+            #_______Light settings
+            p.ChangeDutyCycle(self.lightIntensity)
+            self.after(3000, refresh_pins)
+        refresh_pins
+        '''
 if __name__ == "__main__":
     root = tk.Tk()
     main = MainView(root)
